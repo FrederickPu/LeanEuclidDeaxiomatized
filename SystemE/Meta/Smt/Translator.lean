@@ -2,6 +2,7 @@ import SystemE.Meta.Smt.Esmt
 import SystemE.Meta.Smt.UniGeo
 import SystemE.Theory.Relations
 import SystemE.Theory.Sorts
+import SystemE.Theory.EuclideanGeometry
 import UniGeo.Relations
 import Lean
 
@@ -134,16 +135,16 @@ partial def translateExpr (e : Expr) : EsmtM (TranslationResult EAssertion) := d
     | (``Ne, #[_, l, r]) => buildAssertionFrom translateGeo (fun s t => .neg (.eq s t)) l r
     | (``Eq, #[_ , l, r]) => buildAssertionFrom translateGeo .eq l r
 
-    -- Geometric relations
-    | (``Point.onLine, #[l, r]) => buildAssertionFrom translateGeo (fun s l => .erel (.OnL s l)) l r
-    | (``Point.isCentre, #[l, r]) =>  buildAssertionFrom translateGeo (fun s l => .erel (.Centre s l)) l r
-    | (``Point.onCircle, #[l, r]) =>  buildAssertionFrom translateGeo (fun s l => .erel (.OnC s l)) l r
-    | (``Point.insideCircle, #[l, r]) =>  buildAssertionFrom translateGeo (fun s l => .erel (.InC s l)) l r
-    | (``between, #[a, b, c]) => buildAssertionFrom3 translateGeo (fun x y z => .erel (.Between x y z)) a b c
-    | (``Point.sameSide, #[a, b, c]) => buildAssertionFrom3 translateGeo (fun x y z =>  .erel (.SameSide x y z)) a b c
-    | (``Circle.intersectsCircle, #[c, d]) => buildAssertionFrom translateGeo (fun s l => .erel (.IntersectsCC s l)) c d
-    | (``Line.intersectsCircle, #[c, d]) => buildAssertionFrom translateGeo (fun s l => .erel (.IntersectsLC s l)) c d
-    | (``Line.intersectsLine, #[c, d]) => buildAssertionFrom translateGeo (fun s l => .erel (.IntersectsLL s l)) c d
+    -- Geometric relations (the `_` is for the model satisfying the underlying EuclideanGeometry theory)
+    | (``PreEuclideanGeometry.Point.onLine, #[_, l, r]) => buildAssertionFrom translateGeo (fun s l => .erel (.OnL s l)) l r
+    | (``PreEuclideanGeometry.Point.isCentre, #[_, l, r]) =>  buildAssertionFrom translateGeo (fun s l => .erel (.Centre s l)) l r
+    | (``PreEuclideanGeometry.Point.onCircle, #[_, l, r]) =>  buildAssertionFrom translateGeo (fun s l => .erel (.OnC s l)) l r
+    | (``PreEuclideanGeometry.Point.insideCircle, #[_, l, r]) =>  buildAssertionFrom translateGeo (fun s l => .erel (.InC s l)) l r
+    | (``PreEuclideanGeometry.between, #[_, a, b, c]) => buildAssertionFrom3 translateGeo (fun x y z => .erel (.Between x y z)) a b c
+    | (``PreEuclideanGeometry.Point.sameSide, #[_, a, b, c]) => buildAssertionFrom3 translateGeo (fun x y z =>  .erel (.SameSide x y z)) a b c
+    | (``PreEuclideanGeometry.Circle.intersectsCircle, #[_, c, d]) => buildAssertionFrom translateGeo (fun s l => .erel (.IntersectsCC s l)) c d
+    | (``PreEuclideanGeometry.Line.intersectsCircle, #[_, c, d]) => buildAssertionFrom translateGeo (fun s l => .erel (.IntersectsLC s l)) c d
+    | (``PreEuclideanGeometry.Line.intersectsLine, #[_, c, d]) => buildAssertionFrom translateGeo (fun s l => .erel (.IntersectsLL s l)) c d
 
     -- Specialized UniGeo Relations, see `Smt.UniGeo`
     | (``Triangle.congruent, #[tr1, tr2]) =>
