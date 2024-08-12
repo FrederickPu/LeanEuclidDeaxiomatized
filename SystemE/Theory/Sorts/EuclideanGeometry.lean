@@ -1,4 +1,5 @@
 import Mathlib.Data.Real.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 
 universe u v w
 
@@ -14,8 +15,12 @@ structure PreEuclideanGeometry where
   intersectsLine : Line → Line → Prop
   intersectsCircle₁ : Line → Circle → Prop
   intersectsCircle₂ : Circle → Circle → Prop
-  -- for segment.length
+  -- for Segment.length
   dist : Point → Point → ℝ
+  -- for Angle.degree
+  angleDegree : Point → Point → Point → ℝ
+  -- for Triangle.area
+  triangleArea : Point → Point → Point → ℝ
 
 namespace PreEuclideanGeometry
 
@@ -28,13 +33,14 @@ namespace Angle
 
 variable {E : PreEuclideanGeometry}
 
-opaque Right : ℝ
-opaque degree : E.Angle → ℝ
+def degree (α : E.Angle) : ℝ := match α with
+| ofPoints a b c => E.angleDegree a b c
+
 instance : Coe E.Angle ℝ := ⟨degree⟩
 
 end Angle
 
-notation "∟" => Angle.Right
+notation "∟" => π / 2
 notation:71 "∠" a ":" b ":" c:72 => Angle.degree (Angle.ofPoints a b c)
 
 open Lean PrettyPrinter
@@ -48,7 +54,8 @@ def unexpand_degree : Unexpander
 inductive Triangle (E : PreEuclideanGeometry)
 | ofPoints (a b c : E.Point) : Triangle E
 
-opaque Triangle.area : Triangle E → ℝ
+def Triangle.area (t : Triangle E) : ℝ := match t with
+| ofPoints a b c => E.triangleArea a b c
 
 notation:max "△" a ":" b ":" c:66 => Triangle.ofPoints a b c
 
