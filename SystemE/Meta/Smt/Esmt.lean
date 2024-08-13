@@ -1,6 +1,5 @@
 import SystemE.Meta.Smt.ELang
-import SystemE.Theory.Relations
-import SystemE.Theory.Sorts
+import SystemE.Theory.EuclideanGeometry
 import Lean
 
 set_option autoImplicit false
@@ -79,16 +78,16 @@ end Esmt
 open Esmt
 
 def getSort? : Expr → Option ESort
-| (Expr.const `Point []) => some ESort.Point
-| (Expr.const `Line []) => some ESort.Line
-| (Expr.const `Circle []) => some ESort.Circle
+| (Expr.const `EuclideanGeometry.Point []) => some ESort.Point
+| (Expr.const `EuclideanGeometry.Line []) => some ESort.Line
+| (Expr.const `EuclideanGeometry.Circle []) => some ESort.Circle
 | _ => none
 
 def getSort! : Expr → ESort
-| (Expr.const `Point []) => ESort.Point
-| (Expr.const `Line []) => ESort.Line
-| (Expr.const `Circle []) => ESort.Circle
-| (Expr.const `Area []) => ESort.Area
+| (Expr.const `EuclideanGeometryPoint []) => ESort.Point
+| (Expr.const `EuclideanGeometryLine []) => ESort.Line
+| (Expr.const `EuclideanGeometryCircle []) => ESort.Circle
+| (Expr.const `EuclideanGeometryArea []) => ESort.Area
 | _ => unreachable!
 
 

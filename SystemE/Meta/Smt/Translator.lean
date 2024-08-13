@@ -1,7 +1,5 @@
 import SystemE.Meta.Smt.Esmt
 import SystemE.Meta.Smt.UniGeo
-import SystemE.Theory.Relations
-import SystemE.Theory.Sorts
 import SystemE.Theory.EuclideanGeometry
 import UniGeo.Relations
 import Lean
@@ -57,23 +55,23 @@ def translateNumeric (e: Expr) : EsmtM String :=
 
 /-- Translate applications of metric functions (length, area etc.) over geometric objects-/
 def translateMetric : Expr →  EsmtM (TranslationResult String)
-| .app (.const ``Segment.length _ ) arg => do
+| .app (.const ``PreEuclideanGeometry.Segment.length _ ) arg => do
     match  (← whnf arg).getAppFnArgs with
-    | (``Segment.endpoints, #[(.fvar v1),(.fvar v2)]) => return .ok <| ← mkFvarOp2 "SegmentPP" v1 v2
+    | (``PreEuclideanGeometry.Segment.endpoints, #[(.fvar v1),(.fvar v2)]) => return .ok <| ← mkFvarOp2 "SegmentPP" v1 v2
     | _ => return  .error "[Smt.Translator] Improper arguments given to Segment.length, expected fvars"
-| .app (.const ``Angle.degree _ ) arg => do
+| .app (.const ``PreEuclideanGeometry.Angle.degree _ ) arg => do
     match  (← whnf arg).getAppFnArgs with
-    | (``Angle.ofPoints, #[(.fvar v1),(.fvar v2), (.fvar v3)]) => return .ok  <| ← mkFvarOp3 "AnglePPP" v1 v2 v3
-    | (``Angle.Right, _) => return .ok "RightAngle"
+    | (``PreEuclideanGeometry.Angle.ofPoints, #[(.fvar v1),(.fvar v2), (.fvar v3)]) => return .ok  <| ← mkFvarOp3 "AnglePPP" v1 v2 v3
+    | (``PreEuclideanGeometry.Angle.Right, _) => return .ok "RightAngle"
     | _ => return  .error "[Smt.Translator] Improper input to Angle.degree"
-| .app (.const ``Triangle.area _ ) arg => do
+| .app (.const ``PreEuclideanGeometry.Triangle.area _ ) arg => do
     match (← whnf arg).getAppFnArgs with
-    | (``Triangle.ofPoints, #[(Expr.fvar v1),(Expr.fvar v2),(Expr.fvar v3)]) => return .ok  <| ← mkFvarOp3 "AreaPPP" v1 v2 v3
+    | (``PreEuclideanGeometry.Triangle.ofPoints, #[(Expr.fvar v1),(Expr.fvar v2),(Expr.fvar v3)]) => return .ok  <| ← mkFvarOp3 "AreaPPP" v1 v2 v3
     | _ => return  .error "[Smt.Translator] Improper input to Triangle.area"
 | e =>
   match e.getAppFnArgs with
   | (``OfNat.ofNat, #[_, _, e]) => return .ok <| ← translateNumeric e
-  | (``Angle.Right, _) => return .ok "RightAngle"
+  | (``PreEuclideanGeometry.Angle.Right, _) => return .ok "RightAngle"
   | _ => return .error s!"[Smt.Translator] Unknown metric operation {e}"
 
 /-- Translate arithmetic expressions -/
@@ -88,8 +86,8 @@ match e.getAppFnArgs with
 
 def translateGeoAux (e : Expr) : EsmtM  (TranslationResult String) :=
  match e.getAppFnArgs with
-  | (``Angle.ofPoints, #[(.fvar v1),(.fvar v2),(.fvar v3)]) => return .ok  <| ← mkFvarOp3 "AnglePPP" v1 v2 v3
-  | (``Triangle.ofPoints, #[(.fvar v1),(.fvar v2),(.fvar v3)]) => return .ok  <| ← mkFvarOp3 "AreaPPP" v1 v2 v3
+  | (``PreEuclideanGeometry.Angle.ofPoints, #[(.fvar v1),(.fvar v2),(.fvar v3)]) => return .ok  <| ← mkFvarOp3 "AnglePPP" v1 v2 v3
+  | (``PreEuclideanGeometry.Triangle.ofPoints, #[(.fvar v1),(.fvar v2),(.fvar v3)]) => return .ok  <| ← mkFvarOp3 "AreaPPP" v1 v2 v3
   | x => return .error s!"[Smt.Translator] Expected geometric object, got {x}"
 
 /-Translate geometric objects -/

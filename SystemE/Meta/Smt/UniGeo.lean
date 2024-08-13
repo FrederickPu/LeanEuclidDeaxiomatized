@@ -1,5 +1,5 @@
 import Lean.Meta
-import SystemE.Theory
+import SystemE.Theory.EuclideanGeometry
 open Lean
 
 /- A few handcoded translations for UniGeo-specific constructs and abbreviations, not required for formalizing *Elements* -/
@@ -13,9 +13,9 @@ def mkEq (a b : Expr) : Expr := mkApp3 (.const `Eq []) (.const `Real []) a b
 
 def handleCongruentTriangle (tr1 tr2 : Expr) : Option Expr :=
   match tr1.getAppFnArgs with
-  | (``Triangle.ofPoints, #[A,B,C]) =>
+  | (``PreEuclideanGeometry.Triangle.ofPoints, #[A,B,C]) =>
     match tr2.getAppFnArgs with
-    | (``Triangle.ofPoints, #[D, E, F]) =>
+    | (``PreEuclideanGeometry.Triangle.ofPoints, #[D, E, F]) =>
       let ab_eq_de := mkEq (mkSegmentLengthExpr A B) (mkSegmentLengthExpr D E)
       let bc_eq_ef := mkEq (mkSegmentLengthExpr B C) (mkSegmentLengthExpr E F)
       let ca_eq_fd := mkEq (mkSegmentLengthExpr C A) (mkSegmentLengthExpr F D)
@@ -51,9 +51,9 @@ def mkDiv (e1 e2 : Expr) : Expr :=
 
 def handleSimilarTriangle (tr1 tr2 : Expr) : Option Expr :=
  match tr1.getAppFnArgs with
-  | (``Triangle.ofPoints, #[A,B,C]) =>
+  | (``PreEuclideanGeometry.Triangle.ofPoints, #[A,B,C]) =>
     match tr2.getAppFnArgs with
-    | (``Triangle.ofPoints, #[D, E, F]) =>
+    | (``PreEuclideanGeometry.Triangle.ofPoints, #[D, E, F]) =>
       let abc_eq_def := mkEq (mkAngleExpr A B C) (mkAngleExpr D E F)
       let bca_eq_efd := mkEq (mkAngleExpr B C A) (mkAngleExpr E F D)
       let cab_eq_fde := mkEq (mkAngleExpr C A B) (mkAngleExpr F D E)

@@ -36,9 +36,11 @@ variable {E : PreEuclideanGeometry}
 def degree (α : E.Angle) : ℝ := match α with
 | ofPoints a b c => E.angleDegree a b c
 
+noncomputable def Right := Real.pi / 2
+
 end Angle
 
-notation "∟" => Real.pi / 2
+notation "∟" => Angle.Right
 notation:71 "∠" a ":" b ":" c:72 => Angle.degree (Angle.ofPoints a b c)
 
 open Lean PrettyPrinter

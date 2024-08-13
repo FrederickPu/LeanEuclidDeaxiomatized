@@ -1,24 +1,29 @@
-import SystemE.Theory.Relations
+import SystemE.Theory.EuclideanGeometry
+
+open EuclideanGeometry PreEuclideanGeometry
+
+variable { E : EuclideanGeometry }
+
 
 @[simp]
-abbrev twoLinesIntersectAtPoint (AB BC : Line) (b: Point) : Prop :=
+abbrev twoLinesIntersectAtPoint (AB BC : E.Line) (b: E.Point) : Prop :=
   AB.intersectsLine BC ∧ b.onLine AB ∧ b.onLine BC ∧ AB ≠ BC
 
 @[simp]
-abbrev formQuadrilateral (a b c d : Point) (AB CD AC BD : Line) : Prop :=
+abbrev formQuadrilateral (a b c d : E.Point) (AB CD AC BD : E.Line) : Prop :=
     distinctPointsOnLine a b AB ∧
     distinctPointsOnLine c d CD ∧
     distinctPointsOnLine a c AC ∧
     distinctPointsOnLine b d BD ∧ a.sameSide c BD ∧ a.sameSide b CD ∧ b.sameSide d AC ∧ c.sameSide d AB
 
 @[simp]
-axiom quadrilateralAnglesSum (a b c d : Point) (AB CD AC BD : Line) :
+axiom quadrilateralAnglesSum (a b c d : E.Point) (AB CD AC BD : E.Line) :
     formQuadrilateral a b c d AB CD AC BD → ∠ a:b:d + ∠ b:d:c + ∠ d:c:a + ∠ c:a:b = ∟ + ∟ + ∟ + ∟
 
 namespace Triangle
 
 @[simp]
-abbrev congruent : Triangle → Triangle →  Prop
+abbrev congruent : E.Triangle → E.Triangle →  Prop
 | (Triangle.ofPoints A B C) ,(Triangle.ofPoints D E F) =>
   -- SSS
   (|(A─B)| = |(D─E)| ∧ |(B─C)| = |(E─F)| ∧ |(C─A)| = |(F─D)|) ∨
@@ -38,7 +43,7 @@ abbrev congruent : Triangle → Triangle →  Prop
   (∠ A:B:C = ∠ D:E:F ∧ |(B─C)| = |(E─F)| ∧ ∠ C:A:B = ∠ F:D:E)
 
 @[aesop unsafe [apply,forward]]
-axiom congruent_if (T1 T2: Triangle): congruent T1 T2 →
+axiom congruent_if (T1 T2: E.Triangle): congruent T1 T2 →
   match T1,T2 with
   | (Triangle.ofPoints A B C) ,(Triangle.ofPoints D E F) =>
     |(A─B)| = |(D─E)| ∧ |(B─C)| = |(E─F)| ∧ |(A─C)| = |(D─F)| ∧ ∠ A:B:C = ∠ D:E:F ∧ ∠ A:C:B = ∠ D:F:E ∧ ∠ B:A:C = ∠ E:D:F
@@ -46,7 +51,7 @@ axiom congruent_if (T1 T2: Triangle): congruent T1 T2 →
 notation:50 a:51 "≅" b:51 => congruent a b
 
 @[simp]
-abbrev similar (T1 T2: Triangle): Prop :=
+abbrev similar (T1 T2: E.Triangle): Prop :=
   match T1, T2 with
   | (Triangle.ofPoints A B C) ,(Triangle.ofPoints D E F) =>
   (∠ A:B:C = ∠ D:E:F ∧ ∠ B:C:A = ∠ E:F:D) ∨
@@ -62,7 +67,7 @@ abbrev similar (T1 T2: Triangle): Prop :=
 notation:50 a:51 "~" b:51 => similar a b
 
 @[aesop unsafe [apply,forward]]
-axiom similar_if (T1 T2: Triangle): similar T1 T2 →
+axiom similar_if (T1 T2: E.Triangle): similar T1 T2 →
   match T1,T2 with
   | (Triangle.ofPoints A B C) ,(Triangle.ofPoints D E F) =>
     |(A─B)| / |(D─E)| = |(B─C)| / |(E─F)| ∧ |(A─B)| / |(D─E)| = |(B─C)| / |(E─F)|
