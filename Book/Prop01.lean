@@ -1,10 +1,36 @@
 import SystemE
+import Lean
+open Lean
+open Lean.Elab
+open Lean.Elab.Term
+open Lean.Meta
+
+-- Define a custom elaborator for the `Point` symbol
+elab "Point" : term => do
+  -- Get the local context
+  let lctx ← getLCtx
+  -- Iterate through local variables to find one of type `EuclideanGeometry`
+
+  for wlocal in lctx do
+    let (varName, varType) := (wlocal.fvarId, wlocal.type)
+    -- Check if the variable is of type `EuclideanGeometry`
+    let type ← inferType varType
+    dbg_trace type
+    match varType with
+    | Expr.sort _ => dbg_trace "womp"
+    | Expr.const `EuclideanGeometry l =>
+      return (mkApp (Expr.const `PreEuclideanGeometry.Point l) (mkFVar varName))
+    | _ => pure ()
+  throwError "No EuclideanGeometry (model) variable could be found"
+
+section
 
 open EuclideanGeometry
 
-variable { E : EuclideanGeometry }
+variable { E : EuclideanGeometry } {α : Type} {G : Group α}
 
-theorem proposition_1 : ∀ (a b : E.Point) (AB : E.Line),
+
+theorem proposition_1 : ∀ (a b : Point) (AB : E.Line),
   PreEuclideanGeometry.distinctPointsOnLine a b AB →
   ∃ c : E.Point, |(c─a)| = |(a─b)| ∧ |(c─b)| = |(a─b)| :=
 by
@@ -29,3 +55,5 @@ by
   euclid_apply E.point_on_circle_onlyif b a c ACE
   use c
   euclid_finish
+
+end
