@@ -1,7 +1,10 @@
 import SystemE
+import SystemE.Abbrev
 import Book.Prop01
 
 namespace Elements.Book1
+
+variable { E : EuclideanGeometry }
 
 theorem proposition_2 : ∀ (a b c : Point) (BC : Line),
   (distinctPointsOnLine b c BC) ∧ (a ≠ b) →
