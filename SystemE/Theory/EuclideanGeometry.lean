@@ -573,5 +573,4 @@ class EuclideanGeometry extends EuclideanSuperposition where
   rectangle_area : ∀ (a b c d : Point) (AB CD AC BD : Line),
     formParallelogram a b c d AB CD AC BD ∧ (∠ a:c:d = ∟) →
     (Triangle.area △ a:c:d + Triangle.area △ a:b:d = |(a─b)| * |(a─c)|) ∧ (Triangle.area △ b:a:c + Triangle.area △ b:d:c) = |(a─b)| * |(a─c)|
-variable { E : EuclideanGeometry}
-#check E.circle_from_points
+#check EuclideanConstructions.toPreEuclideanGeometry
