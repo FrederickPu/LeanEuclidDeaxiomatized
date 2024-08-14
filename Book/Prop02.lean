@@ -1,6 +1,9 @@
 import SystemE
 import SystemE.Abbrev
+
 import Book.Prop01
+
+open EuclideanGeometry EuclideanSuperposition EuclideanMetric EuclideanDiagrammatic EuclideanConstructions PreEuclideanGeometry
 
 namespace Elements.Book1
 
