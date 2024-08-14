@@ -1,10 +1,8 @@
 import SystemE
-import SystemE.Abbrev
-
-open EuclideanGeometry EuclideanSuperposition EuclideanMetric EuclideanDiagrammatic EuclideanConstructions PreEuclideanGeometry
 
 namespace Elements.Book1
 
+open EuclideanGeometry EuclideanSuperposition EuclideanMetric EuclideanDiagrammatic EuclideanConstructions PreEuclideanGeometry
 variable { E : EuclideanGeometry }
 
 theorem proposition_1 : ∀ (a b : Point) (AB : Line),

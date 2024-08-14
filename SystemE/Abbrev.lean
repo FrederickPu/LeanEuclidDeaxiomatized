@@ -1,4 +1,4 @@
-import SystemE
+import SystemE.Theory.EuclideanGeometry
 import Lean
 open Lean
 open Lean.Elab
