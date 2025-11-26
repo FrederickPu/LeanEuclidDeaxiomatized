@@ -66,4 +66,4 @@ require checkdecls from git "https://github.com/PatrickMassot/checkdecls.git"
 
 meta if get_config? env = some "dev" then
 require «doc-gen4» from git
-  "https://github.com/leanprover/doc-gen4.git" @ "v4.19.0"
+  "https://github.com/leanprover/doc-gen4.git" @ "v.4.24.0"
